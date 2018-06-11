@@ -19,7 +19,8 @@ var enemy = {
     speed: 5,
     moving: 0, // countdown: how many seconds ghost moves in the same dir
     dirx: 0,
-    diry: 0
+    diry: 0,
+    flash: 0
 };
 
 var powerdot = {
@@ -232,6 +233,13 @@ function render() {
         //-----         -------
     }
 
+    //----- Animate ghost state / which ghost image do you want to render? -----
+    if(enemy.flash == 0){
+        enemy.flash = 32
+    }
+    else{
+        enemy.flash = 0
+    }
 
     //used for score
     context.font = "20px Verdana";
@@ -242,7 +250,8 @@ function render() {
     context.drawImage(
 
         mainImage,                  //  obj created from ln 9
-        enemy.ghostNum,  0,         //  pick the red ghost //  moves viewport || select mouth img, //  origin loc of xy || which coordinates do you want to place the "viewport"
+        enemy.ghostNum,             //  pick the red ghost //  moves viewport || select ghost img,
+        enemy.flash,                //  origin loc of xy || which coordinates do you want to place the "viewport"
         32, 32,                     //  from origin, specify width&height || defines "viewport" x&y
         enemy.x, enemy.y,           //  destination loc of xy cord || now that "viewport" && image defined, where (X&Y cords) do you want to put it?
         32, 32                      //  defines the size of it
