@@ -1,9 +1,9 @@
 //Objects
-const score =0;
-const gscore =0;
+var score =0;
+var gscore =0;
 
 
-const player = {
+var player = {
     x: 50,
     y: 100,
     pacmouth: 320,
@@ -14,8 +14,8 @@ const player = {
 
 
 //Init Canvas
-const canvas = document.createElement("canvas"); //same thing as <canvas></canvas>
-const context = canvas.getContext("2d");
+var canvas = document.createElement("canvas"); //same thing as <canvas></canvas>
+var context = canvas.getContext("2d");
 canvas.height = 400;
 canvas.width = 600;
 document.body.appendChild(canvas);
@@ -28,7 +28,7 @@ mainImage.onload = checkReady; //will be function that checks the ready state
 mainImage.src = "pac.png";
 
 //Define Key mapping obj
-const keyclick = {};
+var keyclick = {};
 
 // define Event Listener
 
@@ -104,7 +104,11 @@ function checkReady() {
 }
 
 function playgame() {
+
+    score++;
     render();
+    console.log(score);
+    requestAnimationFrame(playgame) //continuous rendering out of the frame
 }
 
 function render() {
