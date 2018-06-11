@@ -12,6 +12,12 @@ var player = {
     speed: 5    //increments move on x OR y axis
 };
 
+var enemy = {
+    x: 150,
+    y: 200,
+    speed: 5
+};
+
 
 //Init Canvas
 var canvas = document.createElement("canvas"); //same thing as <canvas></canvas>
@@ -108,7 +114,7 @@ function playgame() {
     score++;
     render();
     console.log(score);
-    requestAnimationFrame(playgame) //continuous rendering out of the frame
+    requestAnimationFrame(playgame) //continuous rendering out of the frame: refreshes
 }
 
 function render() {
@@ -117,7 +123,22 @@ function render() {
     context.fillStyle = 'blue';
     context.fillRect(0,0, canvas.width, canvas.height);
 
-    //Puts img on screen
+    //used for score
+    context.font = "20px Verdana";
+    context.fillStyle = "white";
+    context.fillText("Pacman: " + score + " vs Ghost: " + gscore, 2,18 );  //last two params : where to display score
+
+    //Puts ghost on the creen
+    context.drawImage(
+
+        mainImage,                  //  obj created from ln 9
+        0,  0, //pick the red ghost //  moves viewport || select mouth img, //  origin loc of xy || which coordinates do you want to place the "viewport"
+        32, 32,                     //  from origin, specify width&height || defines "viewport" x&y
+        enemy.x, enemy.y,           //  destination loc of xy cord || now that "viewport" && image defined, where (X&Y cords) do you want to put it?
+        32, 32                      //  defines the size of it
+    );
+
+    //Puts PacMan on screen
     context.drawImage(
 
         mainImage,                  //  obj created from ln 9
@@ -128,10 +149,7 @@ function render() {
         32, 32                      //  defines the size of it
     );
 
-    //used for score
-    context.font = "20px Verdana";
-    context.fillStyle = "white";
-    context.fillText("Pacman: " + score + " vs Ghost: " + gscore, 2,18 ); //last two params : where to display score
+
 
 }
 
