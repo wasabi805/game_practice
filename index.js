@@ -20,7 +20,8 @@ var enemy = {
     moving: 0, // countdown: how many seconds ghost moves in the same dir
     dirx: 0,
     diry: 0,
-    flash: 0
+    flash: 0,
+    ghosteat: false
 };
 
 var powerdot = {
@@ -141,10 +142,10 @@ function render() {
     context.fillRect(0,0, canvas.width, canvas.height);
 
     //check if powerup exists, spawn it
-    if(!powerdot.powerup){
+    if(!powerdot.powerup && powerdot.pcountdown < 5 ){ //if the dot was eaten && the timer is at the last 5 secs
         powerdot.x = randomNum(420)+30; //+30 offset the top
         powerdot.y = randomNum(250);
-        powerdot.powerup = true; //create it
+        powerdot.powerup = true; //create it / re-spawn
     }
 
 
@@ -216,6 +217,20 @@ function render() {
         enemy.ghostNum = 384 ;//384 is the blue ghost
         powerdot.x =0;
         powerdot.y = 0;
+        powerdot.ghosteat = true
+
+    }
+
+    //While the timer is counting down && ghosts are edible...
+    if(powerdot.ghosteat == true){
+        powerdot.pcountdown --; //start the countdown
+
+        //----- Check Countdown -----
+        if(powerdot.pcountdown <= 0 ){
+            powerdot.ghosteat = false;
+            enemy.ghostNum = powerdot.ghostNum; // change the color back when timer runs out
+
+        }
 
     }
 
@@ -230,6 +245,13 @@ function render() {
         context.arc(powerdot.x, powerdot.y, 10,0, Math.PI * 2, true);
         context.closePath();
         context.fill();
+
+        if(enemy.flash == 0){
+            enemy.flash = 32
+        }
+        else{
+            enemy.flash = 0
+        }
         //-----         -------
     }
 
