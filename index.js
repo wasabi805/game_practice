@@ -22,6 +22,12 @@ var enemy = {
     diry: 0
 };
 
+var powerdot = {
+    x: 10,
+    y: 10,
+    powerup : false //means that not there or pacman ate it
+};
+
 
 //Init Canvas
 var canvas = document.createElement("canvas"); //same thing as <canvas></canvas>
@@ -135,6 +141,13 @@ function render() {
     context.fillStyle = 'blue';
     context.fillRect(0,0, canvas.width, canvas.height);
 
+    //check if powerup exists, spawn it
+    if(!powerdot.powerup){
+        powerdot.x = randomNum(420)+30; //+30 offset the top
+        powerdot.y = randomNum(250);
+        powerdot.powerup = true; //create it
+    }
+
 
     //-----         ENEMY Characteristics       -----
     //ghost check
@@ -187,6 +200,20 @@ function render() {
     if(enemy.x < 0){enemy.x = (canvas.width-32)}
     if(enemy.y < 0){enemy.y = (canvas.height-32)}
 
+
+    //POWERUP
+    //----- When powerup exists, how to spawn it : THIS WILL SHOW HOW TO DRAW IT
+    if(powerdot.powerup){
+        context.fillStyle = "#ffffff";
+
+        //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+        //-----Draw Circle-----
+        context.beginPath();
+        context.arc(powerdot.x, powerdot.y, 7,0, Math.PI * 2, true);
+        context.closePath();
+        context.fill();
+        //-----         -------
+    }
 
 
     //used for score
