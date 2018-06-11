@@ -16,7 +16,10 @@ var player = {
 var enemy = {
     x: 150,
     y: 200,
-    speed: 5
+    speed: 5,
+    moving: 0, // countdown: how many seconds ghost moves in the same dir
+    dirx: 0,
+    diry: 0
 };
 
 
@@ -131,9 +134,9 @@ function render() {
     context.fillStyle = 'blue';
     context.fillRect(0,0, canvas.width, canvas.height);
 
+
+    //-----         ENEMY Characteristics       -----
     //ghost check
-
-
     if(!ghost){
         enemy.ghostNum = randomNum(5) * 64;  //enemy.ghostNum = select which color ghost
 
@@ -143,6 +146,35 @@ function render() {
     }
 
     ghost = true;
+
+    //keep in mind since this is in the render(){}, the enemy will move quicker
+    if(enemy.moving<0){
+        enemy.moving = (randomNum(30)*3) +10 + randomNum(2);
+        enemy.speed = (randomNum(4)+1); //vary the speed when ghost change dir
+        enemy.dirx = 0;
+        enemy.diry = 0;
+
+        //if remainder, move left or right
+        if(enemy.moving % 2){
+
+            if(player.x < enemy.x){
+                enemy.dirx = -enemy.speed; //determine speed of enemy based pacman pos
+            }else{
+                enemy.dirx = enemy.speed
+            }
+
+            //if NO remainder, move up or down
+        }else{
+            if(player.y < enemy.y){
+                enemy.diry = -enemy.speed; //determine speed of enemy based pacman pos
+            }else{
+                enemy.diry = enemy.speed
+            }
+        }
+    }
+
+
+    //----- /////   -----   /////   -----   /////
 
 
     //used for score
@@ -154,7 +186,7 @@ function render() {
     context.drawImage(
 
         mainImage,                  //  obj created from ln 9
-        enemy.ghostNum,  0, //pick the red ghost //  moves viewport || select mouth img, //  origin loc of xy || which coordinates do you want to place the "viewport"
+        enemy.ghostNum,  0,         //  pick the red ghost //  moves viewport || select mouth img, //  origin loc of xy || which coordinates do you want to place the "viewport"
         32, 32,                     //  from origin, specify width&height || defines "viewport" x&y
         enemy.x, enemy.y,           //  destination loc of xy cord || now that "viewport" && image defined, where (X&Y cords) do you want to put it?
         32, 32                      //  defines the size of it
@@ -170,6 +202,14 @@ function render() {
         player.x, player.y,         //  destination loc of xy cord || now that "viewport" && image defined, where (X&Y cords) do you want to put it?
         32, 32                      //  defines the size of it
     );
+
+    //decrement the movement for further randomization of movement
+    enemy.moving--;
+
+
+    //define the movement increments
+    enemy.x = enemy.x + enemy.dirx;
+    enemy.y = enemy.y + enemy.diry;
     
 }
 
