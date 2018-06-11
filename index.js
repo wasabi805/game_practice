@@ -1,3 +1,17 @@
+//Objects
+const score =0;
+const gscore =0;
+
+
+const player = {
+    //init state
+    x: 50,
+    y: 100,
+    pacmouth: 320,
+    pacdir: 0,
+    psize: 32
+};
+
 
 //Init Canvas
 const canvas = document.createElement("canvas"); //same thing as <canvas></canvas>
@@ -14,15 +28,19 @@ mainImage.onload = checkReady; //will be function that checks the ready state
 mainImage.src = "pac.png";
 
 //Define Key mapping obj
-var keyclick = {
+const keyclick = {
 
 };
 
 // define Event Listener
+
 document.addEventListener('keydown', (event)=>{
     //the event: callback
     keyclick[event.keyCode] = true;
-    console.log(keyclick);
+    console.log(keyclick, 'frm : keydown');
+
+    //call the move func
+    move(keyclick)
 }, false);
 
 //when you lift up pressing a key, it clears the value of keyclick obj
@@ -33,26 +51,14 @@ document.addEventListener('keyup', (event)=>{
 }, false);
 
 
+function move(keyclick) {
+    player.x++;
+    render()
+}
 
-//Objects
-const score =0;
-const gscore =0;
-
-const player = {
-    //init state
-    x: 50,
-    y: 100,
-    pacmouth: 320,
-    pacdir: 0,
-    psize: 32
-};
-
-
-//define
 function checkReady() {
 
     this.ready = true;
-
     playgame();
 
 }
@@ -61,6 +67,7 @@ function playgame() {
 
     render();
 }
+
 
 function render() {
 
@@ -86,10 +93,7 @@ function render() {
 
 }
 
-// checkReady();
-
-
-document.body.appendChild(canvas);
+// document.body.appendChild(canvas);
 
 
 
