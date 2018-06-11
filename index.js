@@ -1,22 +1,37 @@
 
 //Init Canvas
-var canvas = document.createElement("canvas"); //same thing as <canvas></canvas>
-var context = canvas.getContext("2d");
+const canvas = document.createElement("canvas"); //same thing as <canvas></canvas>
+const context = canvas.getContext("2d");
 canvas.height = 400;
 canvas.width = 600;
+document.body.appendChild(canvas);
+// ctx.fillText("Hello World", 10, 150);
 
 //Loading Images
 mainImage = new Image();
 mainImage.ready = false; //default state
-mainImage.onLoad = checkReady; //will be function that checks the ready state
+mainImage.onload = checkReady; //will be function that checks the ready state
 mainImage.src = "pac.png";
+
+//Define Key mapping obj
+var keyclick = {
+
+};
+
+// define Event Listener
+document.addEventListener('keydown', (event)=>{
+    //the event: callback
+    keyclick[event.keyCode];
+    console.log(keyclick);
+}, false);
+
 
 
 //Objects
-var score =0;
-var gscore =0;
+const score =0;
+const gscore =0;
 
-var player = {
+const player = {
     //init state
     x: 50,
     y: 100,
@@ -30,11 +45,12 @@ var player = {
 function checkReady() {
 
     this.ready = true;
+
     playgame();
 
 }
 
-function playGame() {
+function playgame() {
 
     render();
 }
@@ -63,7 +79,7 @@ function render() {
 
 }
 
-render();
+// checkReady();
 
 
 document.body.appendChild(canvas); //stick it in the dom
