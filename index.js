@@ -10,7 +10,7 @@ var player = {
     pacmouth: 320,
     pacdir: 0,  //direction pac faces on X oR y axis : inc of 32X32 for each face swap
     psize: 32,
-    speed: 5    //increments move on x OR y axis
+    speed: 10    //increments move on x OR y axis
 };
 
 var enemy = {
@@ -25,7 +25,9 @@ var enemy = {
 var powerdot = {
     x: 10,
     y: 10,
-    powerup : false //means that not there or pacman ate it
+    powerup : false, //means that not there or pacman ate it
+    pcountdown : 0,
+    ghostNum : 0
 };
 
 
@@ -121,8 +123,6 @@ function checkReady() {
 }
 
 function playgame() {
-
-
     render();
     requestAnimationFrame(playgame) //continuous rendering out of the frame: refreshes
 }
@@ -131,8 +131,6 @@ function randomNum(num) {
 
     return Math.floor(Math.random()*num)
 }
-
-
 
 
 function render() {
@@ -201,6 +199,25 @@ function render() {
     if(enemy.y < 0){enemy.y = (canvas.height-32)}
 
 
+    //-----     Collision Detection     -----
+
+    //if player cords are in same cord of the powerdot
+    if(player.x <= (
+        powerdot.x) &&
+        powerdot.x <= (player.x+32) && //center of the dot
+        player.y <= (powerdot.y) &&
+        powerdot.y <= (player.y +32)
+    ){
+        console.log('Ate the dot');
+        powerdot.powerup = false; //remove the dot once pacman eats it
+        powerdot.pcountdown = 500; //start the eat ghost timer
+        powerdot.ghostNum =enemy.ghostNum; // used to switch ghost colors back to OG color once powerup countdown expires
+        enemy.ghostNum = 384 ;//384 is the blue ghost
+        powerdot.x =0;
+        powerdot.y = 0;
+
+    }
+
     //POWERUP
     //----- When powerup exists, how to spawn it : THIS WILL SHOW HOW TO DRAW IT
     if(powerdot.powerup){
@@ -209,7 +226,7 @@ function render() {
         //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
         //-----Draw Circle-----
         context.beginPath();
-        context.arc(powerdot.x, powerdot.y, 7,0, Math.PI * 2, true);
+        context.arc(powerdot.x, powerdot.y, 10,0, Math.PI * 2, true);
         context.closePath();
         context.fill();
         //-----         -------
