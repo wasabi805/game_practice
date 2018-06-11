@@ -4,7 +4,6 @@ const gscore =0;
 
 
 const player = {
-    //init state
     x: 50,
     y: 100,
     pacmouth: 320,
@@ -29,13 +28,11 @@ mainImage.onload = checkReady; //will be function that checks the ready state
 mainImage.src = "pac.png";
 
 //Define Key mapping obj
-const keyclick = {
-
-};
+const keyclick = {};
 
 // define Event Listener
 
-document.addEventListener('keydown', (event)=>{
+document.addEventListener('keydown', function(event){
     //the event: callback
     keyclick[event.keyCode] = true;
     console.log(keyclick, 'frm : keydown');
@@ -45,7 +42,7 @@ document.addEventListener('keydown', (event)=>{
 }, false);
 
 //when you lift up pressing a key, it clears the value of keyclick obj
-document.addEventListener('keyup', (event)=>{
+document.addEventListener('keyup', function(event){
     //the event: callback
     delete keyclick[event.keyCode];
 
@@ -57,24 +54,45 @@ function move(keyclick) {
     //left key
     if(37 in keyclick){
         player.x -= player.speed;
-        player.pacdir = 64 //which img? they're all 32X32 apart : choose 64 for open mouth
+        player.pacdir = 64; //which img? they're all 32X32 apart : choose 64 for open mouth
     }
 
     //up key
     if(38 in keyclick){
         player.y -= player.speed;
-        player.pacdir = 96 // the up head
+        player.pacdir = 96; // the up head
     }
 
     //right key
     if(39 in keyclick){
         player.x += player.speed;
-        player.pacdir = 0
+        player.pacdir = 0;
     }
     //down key
     if(40 in keyclick){
         player.y += player.speed;
-        player.pacdir = 32
+        player.pacdir = 32;
+    }
+
+    //----- Move pacman based on directional movement -----
+
+    //if you run into the canvas border...
+    if(player.x > canvas.width-32){player.x = 0}
+    if(player.y > canvas.height-32){player.y = 0}
+
+    //brings pac to the other side of the screen
+    if(player.x < 0){player.x = (canvas.width-32)}
+    if(player.y < 0){player.y = (canvas.height-32)}
+
+    //----- Animate pacman based on directional movement -----
+
+    //when pac moves either mouth open or mouth close
+
+    if(player.pacmouth == 320){
+        player.pacmouth = 352
+    }
+    else{
+        player.pacmouth = 320
     }
 
     render()
