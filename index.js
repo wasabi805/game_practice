@@ -8,8 +8,9 @@ const player = {
     x: 50,
     y: 100,
     pacmouth: 320,
-    pacdir: 0,
-    psize: 32
+    pacdir: 0,  //direction pac faces on X oR y axis : inc of 32X32 for each face swap
+    psize: 32,
+    speed: 5    //increments move on x OR y axis
 };
 
 
@@ -47,27 +48,46 @@ document.addEventListener('keydown', (event)=>{
 document.addEventListener('keyup', (event)=>{
     //the event: callback
     delete keyclick[event.keyCode];
-    console.log(keyclick);
+
 }, false);
 
 
 function move(keyclick) {
-    player.x++;
+
+    //left key
+    if(37 in keyclick){
+        player.x -= player.speed;
+        player.pacdir = 64 //which img? they're all 32X32 apart : choose 64 for open mouth
+    }
+
+    //up key
+    if(38 in keyclick){
+        player.y -= player.speed;
+        player.pacdir = 96 // the up head
+    }
+
+    //right key
+    if(39 in keyclick){
+        player.x += player.speed;
+        player.pacdir = 0
+    }
+    //down key
+    if(40 in keyclick){
+        player.y += player.speed;
+        player.pacdir = 32
+    }
+
     render()
 }
 
 function checkReady() {
-
     this.ready = true;
     playgame();
-
 }
 
 function playgame() {
-
     render();
 }
-
 
 function render() {
 
