@@ -1,6 +1,7 @@
 //Objects
 var score =0;
 var gscore =0;
+var ghost = false; //init state: check if ghosts on screen exists
 
 
 var player = {
@@ -111,17 +112,38 @@ function checkReady() {
 
 function playgame() {
 
-    score++;
+
     render();
-    console.log(score);
     requestAnimationFrame(playgame) //continuous rendering out of the frame: refreshes
 }
+
+function randomNum(num) {
+
+    return Math.floor(Math.random()*num)
+}
+
+
+
 
 function render() {
 
     //bg
     context.fillStyle = 'blue';
     context.fillRect(0,0, canvas.width, canvas.height);
+
+    //ghost check
+
+
+    if(!ghost){
+        enemy.ghostNum = randomNum(5) * 64;  //enemy.ghostNum = select which color ghost
+
+        //where to render ghost
+        enemy.x = randomNum(450);
+        enemy.y = randomNum(250) + 30; //+30 prevents ghost from rendering too close to the top
+    }
+
+    ghost = true;
+
 
     //used for score
     context.font = "20px Verdana";
@@ -132,7 +154,7 @@ function render() {
     context.drawImage(
 
         mainImage,                  //  obj created from ln 9
-        0,  0, //pick the red ghost //  moves viewport || select mouth img, //  origin loc of xy || which coordinates do you want to place the "viewport"
+        enemy.ghostNum,  0, //pick the red ghost //  moves viewport || select mouth img, //  origin loc of xy || which coordinates do you want to place the "viewport"
         32, 32,                     //  from origin, specify width&height || defines "viewport" x&y
         enemy.x, enemy.y,           //  destination loc of xy cord || now that "viewport" && image defined, where (X&Y cords) do you want to put it?
         32, 32                      //  defines the size of it
@@ -148,9 +170,7 @@ function render() {
         player.x, player.y,         //  destination loc of xy cord || now that "viewport" && image defined, where (X&Y cords) do you want to put it?
         32, 32                      //  defines the size of it
     );
-
-
-
+    
 }
 
 // document.body.appendChild(canvas);
