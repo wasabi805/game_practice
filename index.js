@@ -21,7 +21,14 @@ var keyclick = {
 // define Event Listener
 document.addEventListener('keydown', (event)=>{
     //the event: callback
-    keyclick[event.keyCode];
+    keyclick[event.keyCode] = true;
+    console.log(keyclick);
+}, false);
+
+//when you lift up pressing a key, it clears the value of keyclick obj
+document.addEventListener('keyup', (event)=>{
+    //the event: callback
+    delete keyclick[event.keyCode];
     console.log(keyclick);
 }, false);
 
@@ -82,7 +89,7 @@ function render() {
 // checkReady();
 
 
-document.body.appendChild(canvas); //stick it in the dom
+document.body.appendChild(canvas);
 
 
 
