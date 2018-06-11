@@ -84,6 +84,7 @@ function move(keyclick) {
         player.pacdir = 32;
     }
 
+    //-----     Keep The Ghosts on the screen   -----
     //----- Move pacman based on directional movement -----
 
     //if you run into the canvas border...
@@ -149,8 +150,8 @@ function render() {
 
     //keep in mind since this is in the render(){}, the enemy will move quicker
     if(enemy.moving<0){
-        enemy.moving = (randomNum(30)*3) +10 + randomNum(2);
-        enemy.speed = (randomNum(4)+1); //vary the speed when ghost change dir
+        enemy.moving = (randomNum(20)*3) +randomNum(1);
+        enemy.speed = (randomNum(3)+1); //vary the speed when ghost change dir
         enemy.dirx = 0;
         enemy.diry = 0;
 
@@ -175,6 +176,17 @@ function render() {
 
 
     //----- /////   -----   /////   -----   /////
+
+
+    //-----     Keep The Ghosts on the screen   -----
+    //if you run into the canvas border...
+    if(enemy.x > enemy.width-32){enemy.x = 0}
+    if(enemy.y > enemy.height-32){enemy.y = 0}
+
+    //brings pac to the other side of the screen
+    if(enemy.x < 0){enemy.x = (canvas.width-32)}
+    if(enemy.y < 0){enemy.y = (canvas.height-32)}
+
 
 
     //used for score
