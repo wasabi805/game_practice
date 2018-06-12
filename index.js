@@ -164,7 +164,7 @@ function render() {
     //-----         ENEMY MOVEMENTS         -----
     //keep in mind since this is in the render(){}, the enemy will move quicker
     if(enemy.moving <0){
-        enemy.moving = (randomNum(20)*3) +randomNum(1);
+        enemy.moving = (randomNum(10)*3) +randomNum(1);
         enemy.speed = (randomNum(1)+1); //vary the speed when ghost change dir
         enemy.dirx = 0;
         enemy.diry = 0;
@@ -182,9 +182,11 @@ function render() {
             if(player.y <enemy.y){enemy.diry = -enemy.speed;}else{enemy.diry = enemy.speed;}
         }
     }
+
+    //----- Give motion to ghost ------
     enemy.moving --;
-    enemy.x = enemy.x + enemy.dirx;
-    enemy.y = enemy.y + enemy.diry;
+    // enemy.x = enemy.x + enemy.dirx;
+    // enemy.y = enemy.y + enemy.diry;
 
     //----- /////   -----   /////   -----   /////
 
@@ -199,7 +201,24 @@ function render() {
     if(enemy.y < 0){enemy.y = (canvas.height-32)}
 
 
-    //-----     Collision Detection     -----
+    //-----     Collision Detection (Ghosts & pacman)    -----
+    if(player.x <= (enemy.x +26) && enemy.x <= (player.x+26) && //+26 =center of the dot/ decreasing the value gives a larger kill radius
+        player.y <= (enemy.y + 26) &&
+        enemy.y <= (player.y +32)) {
+
+        console.log('ghost & pacman collide');
+
+        if(powerdot.ghosteat){
+            score++
+        }
+        else{
+            gscore++
+        }
+
+    }
+
+
+    //-----     Collision Detection (PowerUP & pacman)    -----
 
     //if player cords are in same cord of the powerdot
     if(player.x <= (powerdot.x) && powerdot.x <= (player.x+32) && //center of the dot
@@ -217,6 +236,7 @@ function render() {
 
     }
 
+    //(ALSO used for determining what happens when collision occurs)
     //While the timer is counting down && ghosts are edible...
     if(powerdot.ghosteat == true){
         powerdot.pcountdown --; //start the countdown
