@@ -29,7 +29,7 @@ var powerdot = {
     y: 10,
     powerup : false, //means that not there or pacman ate it
     pcountdown : 0,
-    ghostNum : 0
+    ghostnum : 0
 };
 
 
@@ -94,12 +94,12 @@ function move(keyclick) {
         player.pacdir = 32;
     }
 
-    //-----     Keep The Ghosts on the screen   -----
+    //-----     Keep The PacMan on the screen   -----
     //----- Move pacman based on directional movement -----
 
     //if you run into the canvas border...
-    if(player.x > canvas.width-32){player.x = 0}
-    if(player.y > canvas.height-32){player.y = 0}
+    if(player.x >= canvas.width-32){player.x = 0}
+    if(player.y >= canvas.height-32){player.y = 0}
 
     //brings pac to the other side of the screen
     if(player.x < 0){player.x = (canvas.width-32)}
@@ -134,7 +134,7 @@ function randomNum(num) {
     return Math.floor(Math.random()*num)
 }
 
-
+//------    -----   -----   -----   render()   -----   -----   -----   -----   -----
 function render() {
 
     //bg
@@ -149,52 +149,50 @@ function render() {
     }
 
 
-    //-----         ENEMY Characteristics       -----
+    //-----         ENEMY Characteristics   -----
     //ghost check
     if(!ghost){
-        enemy.ghostNum = randomNum(5) * 64;  //enemy.ghostNum = select which color ghost
+        enemy.ghostnum = randomNum(5) * 64;  //enemy.ghostNum = select which color ghost
 
         //where to render ghost
         enemy.x = randomNum(450);
         enemy.y = randomNum(250) + 30; //+30 prevents ghost from rendering too close to the top
+        ghost = true;
     }
 
-    ghost = true;
 
+    //-----         ENEMY MOVEMENTS         -----
     //keep in mind since this is in the render(){}, the enemy will move quicker
-    if(enemy.moving<0){
+    if(enemy.moving <0){
         enemy.moving = (randomNum(20)*3) +randomNum(1);
-        enemy.speed = (randomNum(3)+1); //vary the speed when ghost change dir
+        enemy.speed = (randomNum(1)+1); //vary the speed when ghost change dir
         enemy.dirx = 0;
         enemy.diry = 0;
 
+        //if powerup eaten, slow down the ghost and make it run away
+        if(powerdot.ghosteat){
+            enemy.speed = enemy.speed * -1;
+        }
+
         //if remainder, move left or right
-        if(enemy.moving % 2){
-
-            if(player.x < enemy.x){
-                enemy.dirx = -enemy.speed; //determine speed of enemy based pacman pos
-            }else{
-                enemy.dirx = enemy.speed
-            }
-
-            //if NO remainder, move up or down
+        if(enemy.moving % 2) {
+            if(player.x < enemy.x) {enemy.dirx = -enemy.speed;}else{enemy.dirx = enemy.speed;}
         }else{
-            if(player.y < enemy.y){
-                enemy.diry = -enemy.speed; //determine speed of enemy based pacman pos
-            }else{
-                enemy.diry = enemy.speed
-            }
+            //move up or down
+            if(player.y <enemy.y){enemy.diry = -enemy.speed;}else{enemy.diry = enemy.speed;}
         }
     }
-
+    enemy.moving --;
+    enemy.x = enemy.x + enemy.dirx;
+    enemy.y = enemy.y + enemy.diry;
 
     //----- /////   -----   /////   -----   /////
 
 
     //-----     Keep The Ghosts on the screen   -----
     //if you run into the canvas border...
-    if(enemy.x > enemy.width-32){enemy.x = 0}
-    if(enemy.y > enemy.height-32){enemy.y = 0}
+    if(enemy.x >= canvas.width-32){enemy.x = 0}
+    if(enemy.y >= canvas.height-32){enemy.y = 0}
 
     //brings pac to the other side of the screen
     if(enemy.x < 0){enemy.x = (canvas.width-32)}
@@ -204,17 +202,15 @@ function render() {
     //-----     Collision Detection     -----
 
     //if player cords are in same cord of the powerdot
-    if(player.x <= (
-        powerdot.x) &&
-        powerdot.x <= (player.x+32) && //center of the dot
+    if(player.x <= (powerdot.x) && powerdot.x <= (player.x+32) && //center of the dot
         player.y <= (powerdot.y) &&
         powerdot.y <= (player.y +32)
     ){
         console.log('Ate the dot');
         powerdot.powerup = false; //remove the dot once pacman eats it
         powerdot.pcountdown = 500; //start the eat ghost timer
-        powerdot.ghostNum =enemy.ghostNum; // used to switch ghost colors back to OG color once powerup countdown expires
-        enemy.ghostNum = 384 ;//384 is the blue ghost
+        powerdot.ghostnum =enemy.ghostnum; // used to switch ghost colors back to OG color once powerup countdown expires
+        enemy.ghostnum = 384 ;//384 is the blue ghost
         powerdot.x =0;
         powerdot.y = 0;
         powerdot.ghosteat = true
@@ -225,13 +221,10 @@ function render() {
     if(powerdot.ghosteat == true){
         powerdot.pcountdown --; //start the countdown
 
-        //----- Check Countdown -----
-        if(powerdot.pcountdown <= 0 ){
-            powerdot.ghosteat = false;
-            enemy.ghostNum = powerdot.ghostNum; // change the color back when timer runs out
-
-        }
-
+       if(powerdot.pcountdown <= 0 ){
+           powerdot.ghosteat = false;
+           enemy.ghostnum = powerdot.ghostnum;
+       }
     }
 
     //POWERUP
@@ -246,33 +239,22 @@ function render() {
         context.closePath();
         context.fill();
 
-        if(enemy.flash == 0){
-            enemy.flash = 32
-        }
-        else{
-            enemy.flash = 0
-        }
         //-----         -------
     }
 
     //----- Animate ghost state / which ghost image do you want to render? -----
-    if(enemy.flash == 0){
-        enemy.flash = 32
-    }
-    else{
-        enemy.flash = 0
-    }
+    if(enemy.flash == 0){enemy.flash = 32} else {enemy.flash = 0}
 
     //used for score
     context.font = "20px Verdana";
     context.fillStyle = "white";
     context.fillText("Pacman: " + score + " vs Ghost: " + gscore, 2,18 );  //last two params : where to display score
 
-    //Puts ghost on the creen
+    //Puts ghost on the screen
     context.drawImage(
 
         mainImage,                  //  obj created from ln 9
-        enemy.ghostNum,             //  pick the red ghost //  moves viewport || select ghost img,
+        enemy.ghostnum,             //  pick the red ghost //  moves viewport || select ghost img,
         enemy.flash,                //  origin loc of xy || which coordinates do you want to place the "viewport"
         32, 32,                     //  from origin, specify width&height || defines "viewport" x&y
         enemy.x, enemy.y,           //  destination loc of xy cord || now that "viewport" && image defined, where (X&Y cords) do you want to put it?
@@ -290,14 +272,6 @@ function render() {
         32, 32                      //  defines the size of it
     );
 
-    //decrement the movement for further randomization of movement
-    enemy.moving--;
-
-
-    //define the movement increments
-    enemy.x = enemy.x + enemy.dirx;
-    enemy.y = enemy.y + enemy.diry;
-    
 }
 
 // document.body.appendChild(canvas);
