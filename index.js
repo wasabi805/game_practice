@@ -185,8 +185,8 @@ function render() {
 
     //----- Give motion to ghost ------
     enemy.moving --;
-    // enemy.x = enemy.x + enemy.dirx;
-    // enemy.y = enemy.y + enemy.diry;
+    enemy.x = enemy.x + enemy.dirx;
+    enemy.y = enemy.y + enemy.diry;
 
     //----- /////   -----   /////   -----   /////
 
@@ -214,6 +214,15 @@ function render() {
         else{
             gscore++
         }
+
+        //re-span cords after score
+        player.x = 10;
+        player.y = 100;
+        enemy.x = 300;
+        enemy.y = 200;
+
+        //reset timer
+        powerdot.pcountdown = 0
 
     }
 
