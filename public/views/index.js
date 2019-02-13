@@ -44,7 +44,7 @@ document.body.appendChild(canvas);
 //Loading Images
 mainImage = new Image();
 mainImage.ready = false; //default state
-mainImage.onload = checkReady; //will be function that checks the ready state
+mainImage.onload = checkReady; //function checkReady() returns bool true ; starts the load
 mainImage.src = "pac.png";
 
 //Define Key mapping obj
@@ -53,11 +53,10 @@ var keyclick = {};
 // define Event Listener
 
 document.addEventListener('keydown', function(event){
-    //the event: callback
+    //the event: callback // console.log(keyclick)
     keyclick[event.keyCode] = true;
-    console.log(keyclick, 'frm : keydown');
 
-    //call the move func
+    //pass the mapped arrow keys to moves() : starts the translation of pacMan moves in the dom
     move(keyclick)
 }, false);
 
@@ -236,7 +235,7 @@ function render() {
     ){
         console.log('Ate the dot');
         powerdot.powerup = false; //remove the dot once pacman eats it
-        powerdot.pcountdown = 500; //start the eat ghost timer
+        powerdot.pcountdown = 1000; //start the eat ghost timer
         powerdot.ghostnum =enemy.ghostnum; // used to switch ghost colors back to OG color once powerup countdown expires
         enemy.ghostnum = 384 ;//384 is the blue ghost
         powerdot.x =0;
@@ -261,7 +260,8 @@ function render() {
     if(powerdot.powerup){
         context.fillStyle = "#ffffff";
 
-        //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+
+        //Had to look at this to get the jist,  https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
         //-----Draw Circle-----
         context.beginPath();
         context.arc(powerdot.x, powerdot.y, 10,0, Math.PI * 2, true);

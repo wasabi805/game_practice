@@ -1,0 +1,22 @@
+{
+  "name": "game_practice",
+  "version": "1.0.0",
+  "description": "Pacman game demo built with HTML, CSS, and Javascript.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wasabi805/game_practice.git"
+  },
+  "author": "Tim Ocampo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wasabi805/game_practice/issues"
+  },
+  "homepage": "https://github.com/wasabi805/game_practice#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
